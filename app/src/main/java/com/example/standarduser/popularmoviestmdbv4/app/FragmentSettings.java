@@ -5,7 +5,7 @@ import android.preference.PreferenceFragment;
 
 import com.example.standarduser.popularmoviestmdbv4.R;
 
-public class SettingsFragment extends PreferenceFragment {
+public class FragmentSettings extends PreferenceFragment {
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);

@@ -1,5 +1,5 @@
 <resources>
-  <string name="app_name">PopularMovies TMDBv4</string>
+  <string name="app_name">PopularMovies TMDbv3</string>
 
   <!-- XML Grid Movie Setting -->
   <string name="menu_gridmovie_section01">Movie Section</string>
