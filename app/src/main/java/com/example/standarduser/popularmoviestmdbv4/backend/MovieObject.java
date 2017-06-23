@@ -17,7 +17,7 @@ public class MovieObject {
   private Boolean ObjectHasVideo;
 
   @SerializedName("vote_average")
-  private Integer ObjectRating;
+  private float ObjectRating;
 
   @SerializedName("title")
   private String ObjectTitle;
@@ -70,11 +70,11 @@ public class MovieObject {
     ObjectHasVideo = objectHasVideo;
   }
 
-  public Integer getObjectRating() {
+  public float getObjectRating() {
     return ObjectRating;
   }
 
-  public void setObjectRating(Integer objectRating) {
+  public void setObjectRating(float objectRating) {
     ObjectRating = objectRating;
   }
 
