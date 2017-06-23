@@ -9,7 +9,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MovieFetcher {
   Retrofit theFetcher;
-  final String BASE_URL = "https://api.themoviedb.org/4/";
+  final String BASE_URL = "https://api.themoviedb.org/3/";
 
   public MovieFetcher() {
     theFetcher = new Retrofit.Builder()
