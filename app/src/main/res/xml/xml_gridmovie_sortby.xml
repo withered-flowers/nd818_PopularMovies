@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+  <PreferenceCategory
+    android:title="@string/menu_gridmovie_section01">
+
+    <ListPreference
+      android:key="@string/action_gridmovie_sortby_key"
+      android:title="@string/action_gridmovie_sortby_title"
+      android:dialogTitle="@string/action_gridmovie_sortby_title_dialog"
+      android:entries="@array/action_gridmovie_sortby_option_name"
+      android:entryValues="@array/action_gridmovie_sortby_option_values"
+      android:defaultValue="@string/action_gridmovie_sortby_option_default_value"
+      android:summary="%s" />
+
+  </PreferenceCategory>
+</PreferenceScreen>

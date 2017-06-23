@@ -1,0 +1,26 @@
+<resources>
+  <string name="app_name">PopularMovies TMDBv4</string>
+
+  <!-- XML Grid Movie Setting -->
+  <string name="menu_gridmovie_section01">Movie Section</string>
+
+  <!-- Menu Grid Movie -->
+  <string name="action_gridmovie_sortby_key">movieSortBy</string>
+  <string name="action_gridmovie_sortby_title">Sort By</string>
+  <string name="action_gridmovie_sortby_title_dialog">Which sort by do you want?</string>
+  <string-array name="action_gridmovie_sortby_option_name">
+    <item>Popular</item>
+    <item>Now Playing</item>
+    <item>Upcoming</item>
+    <item>Top Rated</item>
+  </string-array>
+  <string-array name="action_gridmovie_sortby_option_values">
+    <item>popular</item>
+    <item>now_playing</item>
+    <item>upcoming</item>
+    <item>top_rated</item>
+  </string-array>
+  <string name="action_gridmovie_sortby_option_default_name">Popular</string>
+  <string name="action_gridmovie_sortby_option_default_value">popular</string>
+
+</resources>
