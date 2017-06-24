@@ -24,6 +24,7 @@ public class AdapterMovieObject extends RecyclerView.Adapter<AdapterMovieObject.
   private static final String imageSize = "w185";
 
   private List<MovieObject> listMovie;
+  private MovieObject currentMovieObject;
 
   public AdapterMovieObject(List<MovieObject> listMovie) {
     this.listMovie = listMovie;
@@ -33,20 +34,19 @@ public class AdapterMovieObject extends RecyclerView.Adapter<AdapterMovieObject.
   public AdapterMovieObjectViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
     LayoutInflater inflater = LayoutInflater.from(parent.getContext());
     int idLayout = R.layout.adapter_movieobject_listitem;
-    boolean flagAttachImmediate = false;
 
-    View view = inflater.inflate(idLayout, parent, flagAttachImmediate);
+    View view = inflater.inflate(idLayout, parent, false);
 
     return new AdapterMovieObjectViewHolder(view);
   }
 
   @Override
   public void onBindViewHolder(AdapterMovieObjectViewHolder holder, int position) {
-    MovieObject currentMovieObject = listMovie.get(position);
+    currentMovieObject = listMovie.get(position);
 
     Uri uri = Uri.parse(imageUrl + imageSize + currentMovieObject.getObjectPosterPath());
 
-//    TODO turn this on for debug purpose
+    //TODO turn this on for debug purpose
 //    Log.d(LOG_TAG, "The Uri is: " + uri.toString());
 
     Picasso.with(holder.imgListItem.getContext())
@@ -64,12 +64,22 @@ public class AdapterMovieObject extends RecyclerView.Adapter<AdapterMovieObject.
     }
   }
 
-  public class AdapterMovieObjectViewHolder extends RecyclerView.ViewHolder {
+  public class AdapterMovieObjectViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
     public final ImageView imgListItem;
 
     public AdapterMovieObjectViewHolder(View itemView) {
       super(itemView);
       imgListItem = (ImageView) itemView.findViewById(R.id.movieobject_listitem_imagemovie);
+      itemView.setOnClickListener(this);
+    }
+
+    @Override
+    public void onClick(View v) {
+      int position = getAdapterPosition();
+      currentMovieObject = listMovie.get(position);
+      //TODO (1) Need to pass this to the FragmentMovieDetail !
+      //Should I implement the Interface on the AdapterMovieObject?
+      //Should I just pass the Activity to the AdapterMovieObject constructor?
     }
   }
 }

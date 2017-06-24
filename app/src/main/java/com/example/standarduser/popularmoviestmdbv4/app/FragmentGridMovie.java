@@ -78,7 +78,7 @@ public class FragmentGridMovie extends Fragment {
 
           rvwGridMovie.setAdapter(adpMovieObject);
 
-//          TODO Turn this on for DEBUG PURPOSE
+          //TODO Turn this on for DEBUG PURPOSE
 //          Log.d(LOG_TAG, "Total Film is: " + listMovie.size());
 //
 //          for(int i=0; i<listMovie.size(); i++) {
