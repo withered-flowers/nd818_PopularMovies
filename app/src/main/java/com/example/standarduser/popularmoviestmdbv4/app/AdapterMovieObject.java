@@ -20,8 +20,8 @@ import java.util.List;
 
 public class AdapterMovieObject extends RecyclerView.Adapter<AdapterMovieObject.AdapterMovieObjectViewHolder> {
   private static final String LOG_TAG = AdapterMovieObject.class.getSimpleName();
-  private static final String imageUrl = "http://image.tmdb.org/t/p/";
-  private static final String imageSize = "w185";
+  private static final String IMAGE_URL = "http://image.tmdb.org/t/p/";
+  private static final String IMAGE_SIZE = "w185";
 
   private List<MovieObject> listMovie;
   private MovieObject currentMovieObject;
@@ -54,9 +54,10 @@ public class AdapterMovieObject extends RecyclerView.Adapter<AdapterMovieObject.
   public void onBindViewHolder(AdapterMovieObjectViewHolder holder, int position) {
     currentMovieObject = listMovie.get(position);
 
-    Uri uri = Uri.parse(imageUrl + imageSize + currentMovieObject.getObjectPosterPath());
+    Uri uri = Uri.parse(IMAGE_URL + IMAGE_SIZE + currentMovieObject.getObjectPosterPath());
 
     //TODO turn this on for debug purpose
+//    Log.d(LOG_TAG, "The title is: " + currentMovieObject.getObjectTitle());
 //    Log.d(LOG_TAG, "The Uri is: " + uri.toString());
 
     Picasso.with(holder.imgListItem.getContext())

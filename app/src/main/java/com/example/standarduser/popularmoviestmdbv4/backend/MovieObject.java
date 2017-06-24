@@ -76,7 +76,7 @@ public class MovieObject implements Parcelable {
     dest.writeFloat(getObjectPopularity());
     dest.writeString(getObjectPosterPath());
     dest.writeString(getObjectReleaseDate());
-    dest.writeInt(getObjectRuntime());
+    dest.writeInt(getObjectRuntime() == null ? 0 : getObjectRuntime());
     dest.writeString(getObjectTitle());
     dest.writeInt(getObjectHasVideo() ? 1 : 0);
     dest.writeFloat(getObjectRating());
