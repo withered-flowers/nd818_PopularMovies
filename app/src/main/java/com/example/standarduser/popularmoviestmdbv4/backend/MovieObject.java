@@ -1,26 +1,37 @@
 package com.example.standarduser.popularmoviestmdbv4.backend;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.SerializedName;
+
+import java.util.List;
 
 /**
  * Created by Standard user on 6/23/2017.
  */
 
-public class MovieObject {
-  @SerializedName("vote_count")
-  private Integer ObjectVoteCount;
+public class MovieObject implements Parcelable {
+  @SerializedName("adult")
+  private Boolean ObjectIsAdultRated;
+
+  @SerializedName("backdrop_path")
+  private String ObjectBackdropPath;
+
+  @SerializedName("genre_ids")
+  private List<Integer> ObjectGenreIds;
 
   @SerializedName("id")
   private Integer ObjectId;
 
-  @SerializedName("video")
-  private Boolean ObjectHasVideo;
+  @SerializedName("original_language")
+  private String ObjectOriginalLanguage;
 
-  @SerializedName("vote_average")
-  private float ObjectRating;
+  @SerializedName("original_title")
+  private String ObjectOriginalTitle;
 
-  @SerializedName("title")
-  private String ObjectTitle;
+  @SerializedName("overview")
+  private String ObjectDescription;
 
   @SerializedName("popularity")
   private float ObjectPopularity;
@@ -28,30 +39,104 @@ public class MovieObject {
   @SerializedName("poster_path")
   private String ObjectPosterPath;
 
-  @SerializedName("original_language")
-  private String ObjectOriginalLanguage;
-
-  @SerializedName("genre_ids")
-  private Integer[] ObjectGenreIds;
-
-  @SerializedName("backdrop_path")
-  private String ObjectBackdropPath;
-
-  @SerializedName("adult")
-  private Boolean ObjectIsAdultRated;
-
-  @SerializedName("overview")
-  private String ObjectDescription;
-
   @SerializedName("release_date")
   private String ObjectReleaseDate;
 
-  public Integer getObjectVoteCount() {
-    return ObjectVoteCount;
+  @SerializedName("runtime")
+  private Integer ObjectRuntime;
+
+  @SerializedName("title")
+  private String ObjectTitle;
+
+  @SerializedName("video")
+  private Boolean ObjectHasVideo;
+
+  @SerializedName("vote_average")
+  private float ObjectRating;
+
+  @SerializedName("vote_count")
+  private Integer ObjectVoteCount;
+
+  //PARCELABLE IMPLEMENTATION
+  @Override
+  public int describeContents() {
+    return 0;
   }
 
-  public void setObjectVoteCount(Integer objectVoteCount) {
-    ObjectVoteCount = objectVoteCount;
+  //Write to Parcel with the order or serialization
+  @Override
+  public void writeToParcel(Parcel dest, int flags) {
+    dest.writeInt(getObjectIsAdultRated() ? 1 : 0);
+    dest.writeString(getObjectBackdropPath());
+    dest.writeList(getObjectGenreIds());
+    dest.writeInt(getObjectId());
+    dest.writeString(getObjectOriginalLanguage());
+    dest.writeString(getObjectOriginalTitle());
+    dest.writeString(getObjectDescription());
+    dest.writeFloat(getObjectPopularity());
+    dest.writeString(getObjectPosterPath());
+    dest.writeString(getObjectReleaseDate());
+    dest.writeInt(getObjectRuntime());
+    dest.writeString(getObjectTitle());
+    dest.writeInt(getObjectHasVideo() ? 1 : 0);
+    dest.writeFloat(getObjectRating());
+    dest.writeInt(getObjectVoteCount());
+  }
+
+  //Read from Parcel with the order of serialization
+  protected MovieObject(Parcel in) {
+    setObjectIsAdultRated(in.readInt() == 1);
+    setObjectBackdropPath(in.readString());
+    in.readList(ObjectGenreIds, List.class.getClassLoader());
+    setObjectId(in.readInt());
+    setObjectOriginalLanguage(in.readString());
+    setObjectOriginalTitle(in.readString());
+    setObjectDescription(in.readString());
+    setObjectPopularity(in.readFloat());
+    setObjectPosterPath(in.readString());
+    setObjectReleaseDate(in.readString());
+    setObjectRuntime(in.readInt());
+    setObjectTitle(in.readString());
+    setObjectHasVideo(in.readInt() == 1);
+    setObjectRating(in.readFloat());
+    setObjectVoteCount(in.readInt());
+  }
+
+  public static final Creator<MovieObject> CREATOR = new Creator<MovieObject>() {
+    @Override
+    public MovieObject createFromParcel(Parcel in) {
+      return new MovieObject(in);
+    }
+
+    @Override
+    public MovieObject[] newArray(int size) {
+      return new MovieObject[size];
+    }
+  };
+
+  //GETTER & SETTER HERE
+  public Boolean getObjectIsAdultRated() {
+    return ObjectIsAdultRated;
+  }
+
+  public void setObjectIsAdultRated(Boolean objectIsAdultRated) {
+    ObjectIsAdultRated = objectIsAdultRated;
+  }
+
+  public String getObjectBackdropPath() {
+    return ObjectBackdropPath;
+  }
+
+  public void setObjectBackdropPath(String objectBackdropPath) {
+    ObjectBackdropPath = objectBackdropPath;
+  }
+
+  public List<Integer> getObjectGenreIds() {
+    return ObjectGenreIds;
+  }
+
+  public void setObjectGenreIds(List<Integer> objectGenreIds) {
+    ObjectGenreIds = objectGenreIds;
   }
 
   public Integer getObjectId() {
@@ -62,28 +147,28 @@ public class MovieObject {
     ObjectId = objectId;
   }
 
-  public Boolean getObjectHasVideo() {
-    return ObjectHasVideo;
+  public String getObjectOriginalLanguage() {
+    return ObjectOriginalLanguage;
   }
 
-  public void setObjectHasVideo(Boolean objectHasVideo) {
-    ObjectHasVideo = objectHasVideo;
+  public void setObjectOriginalLanguage(String objectOriginalLanguage) {
+    ObjectOriginalLanguage = objectOriginalLanguage;
   }
 
-  public float getObjectRating() {
-    return ObjectRating;
+  public String getObjectOriginalTitle() {
+    return ObjectOriginalTitle;
   }
 
-  public void setObjectRating(float objectRating) {
-    ObjectRating = objectRating;
+  public void setObjectOriginalTitle(String objectOriginalTitle) {
+    ObjectOriginalTitle = objectOriginalTitle;
   }
 
-  public String getObjectTitle() {
-    return ObjectTitle;
+  public String getObjectDescription() {
+    return ObjectDescription;
   }
 
-  public void setObjectTitle(String objectTitle) {
-    ObjectTitle = objectTitle;
+  public void setObjectDescription(String objectDescription) {
+    ObjectDescription = objectDescription;
   }
 
   public float getObjectPopularity() {
@@ -102,46 +187,6 @@ public class MovieObject {
     ObjectPosterPath = objectPosterPath;
   }
 
-  public String getObjectOriginalLanguage() {
-    return ObjectOriginalLanguage;
-  }
-
-  public void setObjectOriginalLanguage(String objectOriginalLanguage) {
-    ObjectOriginalLanguage = objectOriginalLanguage;
-  }
-
-  public Integer[] getObjectGenreIds() {
-    return ObjectGenreIds;
-  }
-
-  public void setObjectGenreIds(Integer[] objectGenreIds) {
-    ObjectGenreIds = objectGenreIds;
-  }
-
-  public String getObjectBackdropPath() {
-    return ObjectBackdropPath;
-  }
-
-  public void setObjectBackdropPath(String objectBackdropPath) {
-    ObjectBackdropPath = objectBackdropPath;
-  }
-
-  public Boolean getObjectIsAdultRated() {
-    return ObjectIsAdultRated;
-  }
-
-  public void setObjectIsAdultRated(Boolean objectIsAdultRated) {
-    ObjectIsAdultRated = objectIsAdultRated;
-  }
-
-  public String getObjectDescription() {
-    return ObjectDescription;
-  }
-
-  public void setObjectDescription(String objectDescription) {
-    ObjectDescription = objectDescription;
-  }
-
   public String getObjectReleaseDate() {
     return ObjectReleaseDate;
   }
@@ -149,4 +194,46 @@ public class MovieObject {
   public void setObjectReleaseDate(String objectReleaseDate) {
     ObjectReleaseDate = objectReleaseDate;
   }
+
+  public Integer getObjectRuntime() {
+    return ObjectRuntime;
+  }
+
+  public void setObjectRuntime(Integer objectRuntime) {
+    ObjectRuntime = objectRuntime;
+  }
+
+  public String getObjectTitle() {
+    return ObjectTitle;
+  }
+
+  public void setObjectTitle(String objectTitle) {
+    ObjectTitle = objectTitle;
+  }
+
+  public Boolean getObjectHasVideo() {
+    return ObjectHasVideo;
+  }
+
+  public void setObjectHasVideo(Boolean objectHasVideo) {
+    ObjectHasVideo = objectHasVideo;
+  }
+
+  public float getObjectRating() {
+    return ObjectRating;
+  }
+
+  public void setObjectRating(float objectRating) {
+    ObjectRating = objectRating;
+  }
+
+  public Integer getObjectVoteCount() {
+    return ObjectVoteCount;
+  }
+
+  public void setObjectVoteCount(Integer objectVoteCount) {
+    ObjectVoteCount = objectVoteCount;
+  }
+
+
 }

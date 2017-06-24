@@ -32,6 +32,7 @@ import retrofit2.Response;
 
 public class FragmentGridMovie extends Fragment implements AdapterMovieObject.clickHandler {
   private static final String LOG_TAG = FragmentGridMovie.class.getSimpleName();
+  private static final String PARCEL_TAG = "MovieObject";
 
   private Call<MovieList> callMovieList;
   private ProgressBar pbrMovieList;
@@ -39,9 +40,9 @@ public class FragmentGridMovie extends Fragment implements AdapterMovieObject.cl
 
   @Override
   public void onImageViewClick(MovieObject obj) {
+    //Put the data here
     Bundle args = new Bundle();
-    //TODO Put the data here
-    args.putString("DESC", obj.getObjectDescription());
+    args.putParcelable(PARCEL_TAG, obj);
 
     FragmentMovieDetail fmtMovieDetail = new FragmentMovieDetail();
     fmtMovieDetail.setArguments(args);
@@ -97,7 +98,7 @@ public class FragmentGridMovie extends Fragment implements AdapterMovieObject.cl
 
           rvwGridMovie.setAdapter(adpMovieObject);
 
-          //TODO Turn this on for DEBUG PURPOSE
+          //TODO Turn this on for debug purpose
 //          Log.d(LOG_TAG, "Total Film is: " + listMovie.size());
 //
 //          for(int i=0; i<listMovie.size(); i++) {
