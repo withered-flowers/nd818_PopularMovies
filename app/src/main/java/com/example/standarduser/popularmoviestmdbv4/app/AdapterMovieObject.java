@@ -51,7 +51,7 @@ public class AdapterMovieObject extends RecyclerView.Adapter<AdapterMovieObject.
   }
 
   @Override
-  public void onBindViewHolder(AdapterMovieObjectViewHolder holder, int position) {
+  public void onBindViewHolder(final AdapterMovieObjectViewHolder holder, int position) {
     currentMovieObject = listMovie.get(position);
 
     Uri uri = Uri.parse(IMAGE_URL + IMAGE_SIZE + currentMovieObject.getObjectPosterPath());
@@ -64,7 +64,14 @@ public class AdapterMovieObject extends RecyclerView.Adapter<AdapterMovieObject.
         .load(uri)
         .into(holder.imgListItem);
 
-    holder.imgListItem.setOnClickListener(holder);
+    holder.imgListItem.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        if(listener != null) {
+          listener.onImageViewClick(listMovie.get(holder.getAdapterPosition()));
+        }
+      }
+    });
   }
 
   @Override
@@ -77,19 +84,12 @@ public class AdapterMovieObject extends RecyclerView.Adapter<AdapterMovieObject.
     }
   }
 
-  public class AdapterMovieObjectViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+  public class AdapterMovieObjectViewHolder extends RecyclerView.ViewHolder {
     public final ImageView imgListItem;
 
     public AdapterMovieObjectViewHolder(View itemView) {
       super(itemView);
       imgListItem = (ImageView) itemView.findViewById(R.id.movieobject_listitem_imagemovie);
-    }
-
-    @Override
-    public void onClick(View v) {
-      int position = getAdapterPosition();
-      MovieObject data = listMovie.get(position);
-      listener.onImageViewClick(data);
     }
   }
 }
