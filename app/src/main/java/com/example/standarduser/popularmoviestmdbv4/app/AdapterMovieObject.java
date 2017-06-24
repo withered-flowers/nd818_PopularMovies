@@ -1,7 +1,5 @@
 package com.example.standarduser.popularmoviestmdbv4.app;
 
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -27,11 +25,19 @@ public class AdapterMovieObject extends RecyclerView.Adapter<AdapterMovieObject.
 
   private List<MovieObject> listMovie;
   private MovieObject currentMovieObject;
-  private FragmentManager fmtManager;
 
-  public AdapterMovieObject(List<MovieObject> listMovie, FragmentManager fmtManager) {
+  private clickHandler listener;
+
+  public interface clickHandler {
+    void onImageViewClick(MovieObject obj);
+  }
+
+  public AdapterMovieObject(List<MovieObject> listMovie) {
     this.listMovie = listMovie;
-    this.fmtManager = fmtManager;
+  }
+
+  public void setOnImageViewClick(clickHandler listener) {
+    this.listener = listener;
   }
 
   @Override
@@ -56,6 +62,15 @@ public class AdapterMovieObject extends RecyclerView.Adapter<AdapterMovieObject.
     Picasso.with(holder.imgListItem.getContext())
         .load(uri)
         .into(holder.imgListItem);
+
+    holder.imgListItem.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        if(listener != null) {
+          listener.onImageViewClick(currentMovieObject);
+        }
+      }
+    });
   }
 
   @Override
@@ -68,29 +83,12 @@ public class AdapterMovieObject extends RecyclerView.Adapter<AdapterMovieObject.
     }
   }
 
-  public class AdapterMovieObjectViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+  public class AdapterMovieObjectViewHolder extends RecyclerView.ViewHolder {
     public final ImageView imgListItem;
 
     public AdapterMovieObjectViewHolder(View itemView) {
       super(itemView);
       imgListItem = (ImageView) itemView.findViewById(R.id.movieobject_listitem_imagemovie);
-      itemView.setOnClickListener(this);
-    }
-
-    @Override
-    public void onClick(View v) {
-      int position = getAdapterPosition();
-      currentMovieObject = listMovie.get(position);
-      //TODO (1) Need to pass this to the FragmentMovieDetail !
-      //Should I implement the Interface on the AdapterMovieObject?
-      //Should I just pass the Activity to the AdapterMovieObject constructor?
-      FragmentMovieDetail fmtMovieDetail = new FragmentMovieDetail();
-
-      FragmentTransaction trx = fmtManager.beginTransaction();
-      trx.replace(R.id.main_framelayout, fmtMovieDetail);
-      trx.addToBackStack(null);
-      trx.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-      trx.commit();
     }
   }
 }

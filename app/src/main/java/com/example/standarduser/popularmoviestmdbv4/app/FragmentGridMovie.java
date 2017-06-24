@@ -1,6 +1,7 @@
 package com.example.standarduser.popularmoviestmdbv4.app;
 
 import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -29,12 +30,29 @@ import retrofit2.Response;
  * Created by Standard user on 6/23/2017.
  */
 
-public class FragmentGridMovie extends Fragment {
+public class FragmentGridMovie extends Fragment implements AdapterMovieObject.clickHandler {
   private static final String LOG_TAG = FragmentGridMovie.class.getSimpleName();
 
   private Call<MovieList> callMovieList;
   private ProgressBar pbrMovieList;
   private RecyclerView rvwGridMovie;
+
+  @Override
+  public void onImageViewClick(MovieObject obj) {
+    Bundle args = new Bundle();
+    //TODO Put the data here
+    args.putString("DESC", obj.getObjectDescription());
+
+    FragmentMovieDetail fmtMovieDetail = new FragmentMovieDetail();
+    fmtMovieDetail.setArguments(args);
+
+    FragmentTransaction trx = getFragmentManager().beginTransaction();
+
+    trx.replace(R.id.main_framelayout, fmtMovieDetail);
+    trx.addToBackStack(null);
+    trx.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+    trx.commit();
+  }
 
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -69,7 +87,8 @@ public class FragmentGridMovie extends Fragment {
         if(listMovies != null) {
           //Fill the data here
           List<MovieObject> listMovie = listMovies.getListMovieObject();
-          AdapterMovieObject adpMovieObject = new AdapterMovieObject(listMovie, getActivity().getFragmentManager());
+          AdapterMovieObject adpMovieObject = new AdapterMovieObject(listMovie);
+          adpMovieObject.setOnImageViewClick(FragmentGridMovie.this);
 
           rvwGridMovie.setHasFixedSize(true);
 
