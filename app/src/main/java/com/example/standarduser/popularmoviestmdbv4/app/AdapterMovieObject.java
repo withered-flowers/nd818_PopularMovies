@@ -64,14 +64,7 @@ public class AdapterMovieObject extends RecyclerView.Adapter<AdapterMovieObject.
         .load(uri)
         .into(holder.imgListItem);
 
-    holder.imgListItem.setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View v) {
-        if(listener != null) {
-          listener.onImageViewClick(currentMovieObject);
-        }
-      }
-    });
+    holder.imgListItem.setOnClickListener(holder);
   }
 
   @Override
@@ -84,12 +77,19 @@ public class AdapterMovieObject extends RecyclerView.Adapter<AdapterMovieObject.
     }
   }
 
-  public class AdapterMovieObjectViewHolder extends RecyclerView.ViewHolder {
+  public class AdapterMovieObjectViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
     public final ImageView imgListItem;
 
     public AdapterMovieObjectViewHolder(View itemView) {
       super(itemView);
       imgListItem = (ImageView) itemView.findViewById(R.id.movieobject_listitem_imagemovie);
+    }
+
+    @Override
+    public void onClick(View v) {
+      int position = getAdapterPosition();
+      MovieObject data = listMovie.get(position);
+      listener.onImageViewClick(data);
     }
   }
 }
