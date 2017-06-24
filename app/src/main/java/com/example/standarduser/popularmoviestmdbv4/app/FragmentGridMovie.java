@@ -4,10 +4,13 @@ import android.app.Fragment;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import com.example.standarduser.popularmoviestmdbv4.BuildConfig;
 import com.example.standarduser.popularmoviestmdbv4.R;
@@ -30,23 +33,32 @@ public class FragmentGridMovie extends Fragment {
   private static final String LOG_TAG = FragmentGridMovie.class.getSimpleName();
 
   private Call<MovieList> callMovieList;
+  private ProgressBar pbrMovieList;
+  private RecyclerView rvwGridMovie;
 
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
     final View view = inflater.inflate(R.layout.fragment_gridmovie, container, false);
 
-    //TODO Create Fetcher & APIEndpoint here !
+    //Create Fetcher & APIEndpoint here
     MovieFetcher theFetcher = new MovieFetcher();
     MovieAPIEndpoint theEndpoint = theFetcher.getFetcher().create(MovieAPIEndpoint.class);
 
-    //TODO get sorting value from PreferenceFragment
+    //get sorting value from PreferenceFragment
     SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
     String sortBy = prefs.getString(
         getString(R.string.action_gridmovie_sortby_key),
         getString(R.string.action_gridmovie_sortby_option_default_value)
     );
 
-    //TODO Fetch the Data !
+    //Show ProgressBar & hide RecyleView here
+    pbrMovieList = (ProgressBar) view.findViewById(R.id.griddmovie_progressbar_movielist);
+    rvwGridMovie = (RecyclerView) view.findViewById(R.id.gridmovie_recyclerview_movielist);
+
+    rvwGridMovie.setVisibility(View.INVISIBLE);
+    pbrMovieList.setVisibility(View.VISIBLE);
+
+    //Fetch the Data
     callMovieList = theEndpoint.getMoviesBySort(sortBy, BuildConfig.TMDB_API_KEY);
 
     callMovieList.enqueue(new Callback<MovieList>() {
@@ -55,9 +67,27 @@ public class FragmentGridMovie extends Fragment {
         MovieList listMovies = response.body();
 
         if(listMovies != null) {
+          //Fill the data here
           List<MovieObject> listMovie = listMovies.getListMovieObject();
-          Log.d(LOG_TAG, "Total Film is: " + listMovie.size());
+          AdapterMovieObject adpMovieObject = new AdapterMovieObject(listMovie);
+
+          rvwGridMovie.setHasFixedSize(true);
+
+          RecyclerView.LayoutManager rvwLayoutManager = new GridLayoutManager(view.getContext(), 2);
+          rvwGridMovie.setLayoutManager(rvwLayoutManager);
+
+          rvwGridMovie.setAdapter(adpMovieObject);
+
+//          TODO Turn this on for DEBUG PURPOSE
+//          Log.d(LOG_TAG, "Total Film is: " + listMovie.size());
+//
+//          for(int i=0; i<listMovie.size(); i++) {
+//            Log.d(LOG_TAG, "Film " + i + " is:" + listMovie.get(i).getObjectTitle());
+//          }
         }
+
+        rvwGridMovie.setVisibility(View.VISIBLE);
+        pbrMovieList.setVisibility(View.INVISIBLE);
       }
 
       @Override

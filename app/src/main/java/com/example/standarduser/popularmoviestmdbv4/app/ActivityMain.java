@@ -16,12 +16,12 @@ public class ActivityMain extends AppCompatActivity {
     setContentView(R.layout.activity_main);
 
     if(savedInstanceState == null) {
-      FragmentTransaction transaction = getFragmentManager().beginTransaction();
-      FragmentGridMovie fragment = new FragmentGridMovie();
+      FragmentTransaction trx = getFragmentManager().beginTransaction();
+      FragmentGridMovie fmtGridMovie = new FragmentGridMovie();
 
-      transaction.replace(R.id.main_framelayout, fragment);
-      transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-      transaction.commit();
+      trx.replace(R.id.main_framelayout, fmtGridMovie);
+      trx.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+      trx.commit();
     }
   }
 
@@ -36,13 +36,13 @@ public class ActivityMain extends AppCompatActivity {
     int itemId = item.getItemId();
 
     if(itemId == R.id.action_gridmovie_sortby) {
-      FragmentTransaction transaction = getFragmentManager().beginTransaction();
-      FragmentSettings fragment = new FragmentSettings();
+      FragmentTransaction trx = getFragmentManager().beginTransaction();
+      FragmentSettings fmtSettings = new FragmentSettings();
 
-      transaction.replace(R.id.main_framelayout, fragment);
-      transaction.addToBackStack(null);
-      transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-      transaction.commit();
+      trx.replace(R.id.main_framelayout, fmtSettings);
+      trx.addToBackStack(null);
+      trx.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+      trx.commit();
     }
 
     return super.onOptionsItemSelected(item);
