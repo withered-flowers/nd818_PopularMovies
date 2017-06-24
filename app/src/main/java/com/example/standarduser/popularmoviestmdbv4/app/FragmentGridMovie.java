@@ -69,7 +69,7 @@ public class FragmentGridMovie extends Fragment {
         if(listMovies != null) {
           //Fill the data here
           List<MovieObject> listMovie = listMovies.getListMovieObject();
-          AdapterMovieObject adpMovieObject = new AdapterMovieObject(listMovie);
+          AdapterMovieObject adpMovieObject = new AdapterMovieObject(listMovie, getActivity().getFragmentManager());
 
           rvwGridMovie.setHasFixedSize(true);
 

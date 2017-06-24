@@ -1,5 +1,7 @@
 package com.example.standarduser.popularmoviestmdbv4.app;
 
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -25,9 +27,11 @@ public class AdapterMovieObject extends RecyclerView.Adapter<AdapterMovieObject.
 
   private List<MovieObject> listMovie;
   private MovieObject currentMovieObject;
+  private FragmentManager fmtManager;
 
-  public AdapterMovieObject(List<MovieObject> listMovie) {
+  public AdapterMovieObject(List<MovieObject> listMovie, FragmentManager fmtManager) {
     this.listMovie = listMovie;
+    this.fmtManager = fmtManager;
   }
 
   @Override
@@ -80,6 +84,13 @@ public class AdapterMovieObject extends RecyclerView.Adapter<AdapterMovieObject.
       //TODO (1) Need to pass this to the FragmentMovieDetail !
       //Should I implement the Interface on the AdapterMovieObject?
       //Should I just pass the Activity to the AdapterMovieObject constructor?
+      FragmentMovieDetail fmtMovieDetail = new FragmentMovieDetail();
+
+      FragmentTransaction trx = fmtManager.beginTransaction();
+      trx.replace(R.id.main_framelayout, fmtMovieDetail);
+      trx.addToBackStack(null);
+      trx.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+      trx.commit();
     }
   }
 }
