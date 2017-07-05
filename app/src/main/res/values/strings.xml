@@ -9,18 +9,34 @@
   <string name="action_gridmovie_sortby_title">Sort By</string>
   <string name="action_gridmovie_sortby_title_dialog">Which sort by do you want?</string>
   <string-array name="action_gridmovie_sortby_option_name">
-    <item>Popular</item>
-    <item>Now Playing</item>
-    <item>Upcoming</item>
-    <item>Top Rated</item>
+    <item>@string/action_gridmovie_sortby_option_popular_name</item>
+    <item>@string/action_gridmovie_sortby_option_nowplaying_name</item>
+    <item>@string/action_gridmovie_sortby_option_upcoming_name</item>
+    <item>@string/action_gridmovie_sortby_option_toprated_name</item>
+    <item>@string/action_gridmovie_sortby_option_favorite_name</item>
   </string-array>
   <string-array name="action_gridmovie_sortby_option_values">
-    <item>popular</item>
-    <item>now_playing</item>
-    <item>upcoming</item>
-    <item>top_rated</item>
+    <item>@string/action_gridmovie_sortby_option_popular_value</item>
+    <item>@string/action_gridmovie_sortby_option_nowplaying_value</item>
+    <item>@string/action_gridmovie_sortby_option_upcoming_value</item>
+    <item>@string/action_gridmovie_sortby_option_toprated_value</item>
+    <item>@string/action_gridmovie_sortby_option_favorite_value</item>
   </string-array>
+
+  <!-- Menu Grid Movie Option SortBy Label / Name -->
   <string name="action_gridmovie_sortby_option_default_name">Popular</string>
-  <string name="action_gridmovie_sortby_option_default_value">popular</string>
+  <string name="action_gridmovie_sortby_option_popular_name">Popular</string>
+  <string name="action_gridmovie_sortby_option_nowplaying_name">Now Playing</string>
+  <string name="action_gridmovie_sortby_option_upcoming_name">Upcoming</string>
+  <string name="action_gridmovie_sortby_option_toprated_name">Top Rated</string>
+  <string name="action_gridmovie_sortby_option_favorite_name">Favorite</string>
+
+  <!-- Menu Grid Movie Option SortBy Values -->
+  <string name="action_gridmovie_sortby_option_default_value" translatable="false">popular</string>
+  <string name="action_gridmovie_sortby_option_popular_value" translatable="false">popular</string>
+  <string name="action_gridmovie_sortby_option_nowplaying_value" translatable="false">now_playing</string>
+  <string name="action_gridmovie_sortby_option_upcoming_value" translatable="false">upcoming</string>
+  <string name="action_gridmovie_sortby_option_toprated_value" translatable="false">top_rated</string>
+  <string name="action_gridmovie_sortby_option_favorite_value" translatable="false">favorite</string>
 
 </resources>

@@ -77,44 +77,49 @@ public class FragmentGridMovie extends Fragment implements AdapterMovieObject.cl
     rvwGridMovie.setVisibility(View.INVISIBLE);
     pbrMovieList.setVisibility(View.VISIBLE);
 
-    //Fetch the Data
-    callMovieList = theEndpoint.getMoviesBySort(sortBy, BuildConfig.TMDB_API_KEY);
+    if(!sortBy.equals(getString(R.string.action_gridmovie_sortby_option_favorite_value))) {
+      //Fetch the Data From TMDb
+      callMovieList = theEndpoint.getMoviesBySort(sortBy, BuildConfig.TMDB_API_KEY);
 
-    callMovieList.enqueue(new Callback<MovieList>() {
-      @Override
-      public void onResponse(Call<MovieList> call, Response<MovieList> response) {
-        MovieList listMovies = response.body();
+      callMovieList.enqueue(new Callback<MovieList>() {
+        @Override
+        public void onResponse(Call<MovieList> call, Response<MovieList> response) {
+          MovieList listMovies = response.body();
 
-        if(listMovies != null) {
-          //Fill the data here
-          List<MovieObject> listMovie = listMovies.getListMovieObject();
-          AdapterMovieObject adpMovieObject = new AdapterMovieObject(listMovie);
-          adpMovieObject.setOnImageViewClick(FragmentGridMovie.this);
+          if (listMovies != null) {
+            //Fill the data here
+            List<MovieObject> listMovie = listMovies.getListMovieObject();
+            AdapterMovieObject adpMovieObject = new AdapterMovieObject(listMovie);
+            adpMovieObject.setOnImageViewClick(FragmentGridMovie.this);
 
-          rvwGridMovie.setHasFixedSize(true);
+            rvwGridMovie.setHasFixedSize(true);
 
-          RecyclerView.LayoutManager rvwLayoutManager = new GridLayoutManager(view.getContext(), 2);
-          rvwGridMovie.setLayoutManager(rvwLayoutManager);
+            RecyclerView.LayoutManager rvwLayoutManager = new GridLayoutManager(view.getContext(), 2);
+            rvwGridMovie.setLayoutManager(rvwLayoutManager);
 
-          rvwGridMovie.setAdapter(adpMovieObject);
+            rvwGridMovie.setAdapter(adpMovieObject);
 
-          //TODO Turn this on for debug purpose
+            //TODO Turn this on for debug purpose
 //          Log.d(LOG_TAG, "Total Film is: " + listMovie.size());
 //
 //          for(int i=0; i<listMovie.size(); i++) {
 //            Log.d(LOG_TAG, "Film " + i + " is:" + listMovie.get(i).getObjectTitle());
 //          }
+          }
+
+          rvwGridMovie.setVisibility(View.VISIBLE);
+          pbrMovieList.setVisibility(View.INVISIBLE);
         }
 
-        rvwGridMovie.setVisibility(View.VISIBLE);
-        pbrMovieList.setVisibility(View.INVISIBLE);
-      }
-
-      @Override
-      public void onFailure(Call<MovieList> call, Throwable t) {
-        Log.e(LOG_TAG, t.toString());
-      }
-    });
+        @Override
+        public void onFailure(Call<MovieList> call, Throwable t) {
+          Log.e(LOG_TAG, t.toString());
+        }
+      });
+    }
+    else {
+      //TODO Fetch the data from SQLite Database
+    }
 
     return view;
   }
