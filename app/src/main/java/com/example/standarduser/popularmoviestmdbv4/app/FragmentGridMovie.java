@@ -118,7 +118,7 @@ public class FragmentGridMovie extends Fragment implements AdapterMovieObject.cl
       });
     }
     else {
-      //TODO Fetch the data from SQLite Database
+      //TODO [2] Fetch the data from SQLite Database
     }
 
     return view;

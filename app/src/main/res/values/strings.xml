@@ -39,4 +39,6 @@
   <string name="action_gridmovie_sortby_option_toprated_value" translatable="false">top_rated</string>
   <string name="action_gridmovie_sortby_option_favorite_value" translatable="false">favorite</string>
 
+  <!-- Fragment Movie Detail -->
+  <string name="text_moviedetail_favorite_button">Add to Favorite</string>
 </resources>

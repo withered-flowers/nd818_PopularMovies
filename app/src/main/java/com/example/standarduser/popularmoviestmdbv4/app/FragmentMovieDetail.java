@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -25,6 +26,7 @@ public class FragmentMovieDetail extends Fragment {
   private static final String IMAGE_SIZE = "w185";
 
   private ImageView imgMovie;
+  private Button btnAddToFavorite;
   private TextView txtTitle;
   private TextView txtReleaseDate;
   private TextView txtVoteAverage;
@@ -35,6 +37,7 @@ public class FragmentMovieDetail extends Fragment {
     final View view = inflater.inflate(R.layout.fragment_moviedetail, container, false);
 
     imgMovie = (ImageView) view.findViewById(R.id.moviedetail_imageview_movieimage);
+    btnAddToFavorite = (Button) view.findViewById(R.id.moviedetail_button_movieaddfavorite);
     txtTitle = (TextView) view.findViewById(R.id.moviedetail_textview_movietitle);
     txtReleaseDate = (TextView) view.findViewById(R.id.moviedetail_textview_moviereleasedate);
     txtVoteAverage = (TextView) view.findViewById(R.id.moviedetail_textview_movievoteaverage);
@@ -58,6 +61,13 @@ public class FragmentMovieDetail extends Fragment {
       //TODO turn this on for debug purpose
 //      Log.d(LOG_TAG, parcel.getObjectDescription());
     }
+
+    btnAddToFavorite.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        //TODO [1] Add parcelable (id, name) to database
+      }
+    });
 
     return view;
   }
