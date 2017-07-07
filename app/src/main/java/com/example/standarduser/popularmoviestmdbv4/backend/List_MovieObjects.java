@@ -8,7 +8,7 @@ import java.util.List;
  * Created by Standard user on 6/23/2017.
  */
 
-public class MovieList {
+public class List_MovieObjects {
   @SerializedName("page")
   private Integer listPageCurrent;
 

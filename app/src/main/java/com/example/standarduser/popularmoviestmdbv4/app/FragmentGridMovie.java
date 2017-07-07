@@ -15,9 +15,9 @@ import android.widget.ProgressBar;
 
 import com.example.standarduser.popularmoviestmdbv4.BuildConfig;
 import com.example.standarduser.popularmoviestmdbv4.R;
-import com.example.standarduser.popularmoviestmdbv4.backend.MovieAPIEndpoint;
-import com.example.standarduser.popularmoviestmdbv4.backend.MovieFetcher;
-import com.example.standarduser.popularmoviestmdbv4.backend.MovieList;
+import com.example.standarduser.popularmoviestmdbv4.backend.APIEndpoint;
+import com.example.standarduser.popularmoviestmdbv4.backend.Fetcher;
+import com.example.standarduser.popularmoviestmdbv4.backend.List_MovieObjects;
 import com.example.standarduser.popularmoviestmdbv4.backend.MovieObject;
 
 import java.util.List;
@@ -34,7 +34,7 @@ public class FragmentGridMovie extends Fragment implements AdapterMovieObject.cl
   private static final String LOG_TAG = FragmentGridMovie.class.getSimpleName();
   private static final String PARCEL_TAG = "MovieObject";
 
-  private Call<MovieList> callMovieList;
+  private Call<List_MovieObjects> callMovieList;
   private ProgressBar pbrMovieList;
   private RecyclerView rvwGridMovie;
 
@@ -60,8 +60,8 @@ public class FragmentGridMovie extends Fragment implements AdapterMovieObject.cl
     final View view = inflater.inflate(R.layout.fragment_gridmovie, container, false);
 
     //Create Fetcher & APIEndpoint here
-    MovieFetcher theFetcher = new MovieFetcher();
-    MovieAPIEndpoint theEndpoint = theFetcher.getFetcher().create(MovieAPIEndpoint.class);
+    Fetcher theFetcher = new Fetcher();
+    APIEndpoint theEndpoint = theFetcher.getFetcher().create(APIEndpoint.class);
 
     //get sorting value from PreferenceFragment
     SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
@@ -81,10 +81,10 @@ public class FragmentGridMovie extends Fragment implements AdapterMovieObject.cl
       //Fetch the Data From TMDb
       callMovieList = theEndpoint.getMoviesBySort(sortBy, BuildConfig.TMDB_API_KEY);
 
-      callMovieList.enqueue(new Callback<MovieList>() {
+      callMovieList.enqueue(new Callback<List_MovieObjects>() {
         @Override
-        public void onResponse(Call<MovieList> call, Response<MovieList> response) {
-          MovieList listMovies = response.body();
+        public void onResponse(Call<List_MovieObjects> call, Response<List_MovieObjects> response) {
+          List_MovieObjects listMovies = response.body();
 
           if (listMovies != null) {
             //Fill the data here
@@ -112,7 +112,7 @@ public class FragmentGridMovie extends Fragment implements AdapterMovieObject.cl
         }
 
         @Override
-        public void onFailure(Call<MovieList> call, Throwable t) {
+        public void onFailure(Call<List_MovieObjects> call, Throwable t) {
           Log.e(LOG_TAG, t.toString());
         }
       });
