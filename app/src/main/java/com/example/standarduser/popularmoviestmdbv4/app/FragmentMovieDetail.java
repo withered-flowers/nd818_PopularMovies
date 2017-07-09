@@ -3,11 +3,12 @@ package com.example.standarduser.popularmoviestmdbv4.app;
 import android.app.Fragment;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -25,8 +26,9 @@ public class FragmentMovieDetail extends Fragment {
   private static final String IMAGE_URL = "http://image.tmdb.org/t/p/";
   private static final String IMAGE_SIZE = "w185";
 
+  private CoordinatorLayout lytMain;
   private ImageView imgMovie;
-  private Button btnAddToFavorite;
+  private FloatingActionButton btnAddToFavorite;
   private TextView txtTitle;
   private TextView txtReleaseDate;
   private TextView txtVoteAverage;
@@ -36,8 +38,9 @@ public class FragmentMovieDetail extends Fragment {
   public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
     final View view = inflater.inflate(R.layout.fragment_moviedetail, container, false);
 
+    lytMain = (CoordinatorLayout) view.findViewById(R.id.moviedetail_coordinatorlayout_mainlayout);
     imgMovie = (ImageView) view.findViewById(R.id.moviedetail_imageview_movieimage);
-    btnAddToFavorite = (Button) view.findViewById(R.id.moviedetail_button_movieaddfavorite);
+    btnAddToFavorite = (FloatingActionButton) view.findViewById(R.id.moviedetail_button_movieaddfavorite);
     txtTitle = (TextView) view.findViewById(R.id.moviedetail_textview_movietitle);
     txtReleaseDate = (TextView) view.findViewById(R.id.moviedetail_textview_moviereleasedate);
     txtVoteAverage = (TextView) view.findViewById(R.id.moviedetail_textview_movievoteaverage);
@@ -66,6 +69,7 @@ public class FragmentMovieDetail extends Fragment {
       @Override
       public void onClick(View v) {
         //TODO [1] Add parcelable (id, name) to database
+        Snackbar.make(lytMain, "This is just a click", Snackbar.LENGTH_SHORT).show();
       }
     });
 
