@@ -71,7 +71,7 @@ public class FragmentGridMovie extends Fragment implements AdapterMovieObject.cl
     );
 
     //Show ProgressBar & hide RecyleView here
-    pbrMovieList = (ProgressBar) view.findViewById(R.id.griddmovie_progressbar_movielist);
+    pbrMovieList = (ProgressBar) view.findViewById(R.id.gridmovie_progressbar_movielist);
     rvwGridMovie = (RecyclerView) view.findViewById(R.id.gridmovie_recyclerview_movielist);
 
     rvwGridMovie.setVisibility(View.INVISIBLE);

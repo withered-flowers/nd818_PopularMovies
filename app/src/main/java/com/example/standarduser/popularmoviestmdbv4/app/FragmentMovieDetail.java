@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,6 +34,8 @@ public class FragmentMovieDetail extends Fragment {
   private TextView txtReleaseDate;
   private TextView txtVoteAverage;
   private TextView txtDescription;
+  private RecyclerView rvwTrailers;
+  private RecyclerView rvwReviews;
 
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -45,6 +48,8 @@ public class FragmentMovieDetail extends Fragment {
     txtReleaseDate = (TextView) view.findViewById(R.id.moviedetail_textview_moviereleasedate);
     txtVoteAverage = (TextView) view.findViewById(R.id.moviedetail_textview_movievoteaverage);
     txtDescription = (TextView) view.findViewById(R.id.moviedetail_textview_moviedescription);
+    rvwTrailers = (RecyclerView) view.findViewById(R.id.moviedetail_recyclerview_movietrailers);
+    rvwReviews = (RecyclerView) view.findViewById(R.id.moviedetail_recyclerview_moviereviews);
 
     if(getArguments().getParcelable(PARCEL_TAG) != null) {
       MovieObject objMovie = getArguments().getParcelable(PARCEL_TAG);
