@@ -3,6 +3,7 @@ package com.example.standarduser.popularmoviestmdbv4.app;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.SharedPreferences;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.widget.GridLayoutManager;
@@ -19,6 +20,7 @@ import com.example.standarduser.popularmoviestmdbv4.backend.retrofit.APIEndpoint
 import com.example.standarduser.popularmoviestmdbv4.backend.retrofit.Fetcher;
 import com.example.standarduser.popularmoviestmdbv4.backend.pojo.List_MovieObjects;
 import com.example.standarduser.popularmoviestmdbv4.backend.pojo.MovieObject;
+import com.example.standarduser.popularmoviestmdbv4.backend.sqlite.MovieFavoriteDbHelper;
 
 import java.util.List;
 
@@ -89,15 +91,8 @@ public class FragmentGridMovie extends Fragment implements AdapterMovieObject.cl
           if (listMovies != null) {
             //Fill the data here
             List<MovieObject> listMovie = listMovies.getListMovieObject();
-            AdapterMovieObject adpMovieObject = new AdapterMovieObject(listMovie);
-            adpMovieObject.setOnImageViewClick(FragmentGridMovie.this);
 
-            rvwGridMovie.setHasFixedSize(true);
-
-            RecyclerView.LayoutManager rvwLayoutManager = new GridLayoutManager(view.getContext(), 2);
-            rvwGridMovie.setLayoutManager(rvwLayoutManager);
-
-            rvwGridMovie.setAdapter(adpMovieObject);
+            allocateRecyclerView(listMovie, view);
 
             //TODO Turn this on for debug purpose
 //          Log.d(LOG_TAG, "Total Film is: " + listMovie.size());
@@ -118,9 +113,30 @@ public class FragmentGridMovie extends Fragment implements AdapterMovieObject.cl
       });
     }
     else {
-      //TODO [2] Fetch the data from SQLite Database
+      MovieFavoriteDbHelper dbHelper = new MovieFavoriteDbHelper(getActivity().getApplicationContext());
+      SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+      List<MovieObject> listMovie = dbHelper.getAllMovieObject(db);
+      db.close();
+
+      allocateRecyclerView(listMovie, view);
+
+      rvwGridMovie.setVisibility(View.VISIBLE);
+      pbrMovieList.setVisibility(View.INVISIBLE);
     }
 
     return view;
+  }
+
+  private void allocateRecyclerView(List<MovieObject> listMovie, View view) {
+    AdapterMovieObject adpMovieObject = new AdapterMovieObject(listMovie);
+    adpMovieObject.setOnImageViewClick(FragmentGridMovie.this);
+
+    rvwGridMovie.setHasFixedSize(true);
+
+    RecyclerView.LayoutManager rvwLayoutManager = new GridLayoutManager(view.getContext(), 2);
+    rvwGridMovie.setLayoutManager(rvwLayoutManager);
+
+    rvwGridMovie.setAdapter(adpMovieObject);
   }
 }

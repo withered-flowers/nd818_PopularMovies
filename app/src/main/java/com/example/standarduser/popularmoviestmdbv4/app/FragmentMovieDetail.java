@@ -2,6 +2,7 @@ package com.example.standarduser.popularmoviestmdbv4.app;
 
 import android.app.Fragment;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
@@ -27,10 +28,19 @@ import com.example.standarduser.popularmoviestmdbv4.backend.pojo.List_MovieTrail
 import com.example.standarduser.popularmoviestmdbv4.backend.pojo.MovieObject;
 import com.example.standarduser.popularmoviestmdbv4.backend.pojo.MovieReview;
 import com.example.standarduser.popularmoviestmdbv4.backend.pojo.MovieTrailer;
+import com.example.standarduser.popularmoviestmdbv4.backend.sqlite.MovieFavoriteDbHelper;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
+import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.functions.Cancellable;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -94,13 +104,14 @@ public class FragmentMovieDetail extends Fragment implements AdapterMovieTrailer
     rvwTrailers = (RecyclerView) view.findViewById(R.id.moviedetail_recyclerview_movietrailers);
     rvwReviews = (RecyclerView) view.findViewById(R.id.moviedetail_recyclerview_moviereviews);
 
-    hideView();
-    setFABButton();
-
     if(getArguments().getParcelable(PARCEL_TAG) != null) {
-      MovieObject objMovie = getArguments().getParcelable(PARCEL_TAG);
+      final MovieObject objMovie = getArguments().getParcelable(PARCEL_TAG);
 
       assert objMovie != null;
+
+      hideView();
+      setFavoriteButton(objMovie);
+
       Uri uri = Uri.parse(IMAGE_URL + IMAGE_SIZE + objMovie.getObjectPosterPath());
 
       Picasso.with(imgMovie.getContext())
@@ -181,26 +192,47 @@ public class FragmentMovieDetail extends Fragment implements AdapterMovieTrailer
           Log.e(LOG_TAG, t.toString());
         }
       });
+
+      Observable<Integer> obsFloatingActionButton = createButtonClickObservable();
+
+      obsFloatingActionButton
+          .subscribeOn(Schedulers.io())
+          .observeOn(AndroidSchedulers.mainThread())
+          .subscribe(new Consumer<Integer>() {
+            @Override
+            public void accept(@NonNull Integer tagNumber) throws Exception {
+              MovieFavoriteDbHelper dbHelper = new MovieFavoriteDbHelper(getActivity().getApplicationContext());
+              SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+              String snackbarString = "";
+
+              if(tagNumber == BUTTON_FAB_ON) {
+                btnAddToFavorite.setImageResource(BUTTON_FAB_OFF);
+                btnAddToFavorite.setTag(BUTTON_FAB_OFF);
+
+                if(dbHelper.deleteMovieObject(db, objMovie)) {
+                  snackbarString = "Movie delete success";
+                } else {
+                  snackbarString = "Movie delete error";
+                }
+              }
+              else if (tagNumber == BUTTON_FAB_OFF) {
+                btnAddToFavorite.setImageResource(BUTTON_FAB_ON);
+                btnAddToFavorite.setTag(BUTTON_FAB_ON);
+
+                if(dbHelper.insertMovieObject(db, objMovie)) {
+                  snackbarString = "Movie insert success";
+                } else {
+                  snackbarString = "Movie insert error";
+                }
+              }
+
+              db.close();
+
+              Snackbar.make(lytMain, snackbarString, Snackbar.LENGTH_SHORT).show();
+            }
+          });
     }
-
-    btnAddToFavorite.setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View v) {
-        int btnTag = Integer.parseInt(btnAddToFavorite.getTag().toString());
-
-        if(btnTag == BUTTON_FAB_ON) {
-          btnAddToFavorite.setImageResource(BUTTON_FAB_OFF);
-          btnAddToFavorite.setTag(BUTTON_FAB_OFF);
-        }
-        else if (btnTag == BUTTON_FAB_OFF) {
-          btnAddToFavorite.setImageResource(BUTTON_FAB_ON);
-          btnAddToFavorite.setTag(BUTTON_FAB_ON);
-        }
-
-        //TODO [1] Add parcelable (id, name) to database
-        Snackbar.make(lytMain, "This is just a click", Snackbar.LENGTH_SHORT).show();
-      }
-    });
 
     return view;
   }
@@ -219,9 +251,43 @@ public class FragmentMovieDetail extends Fragment implements AdapterMovieTrailer
     pgbMovieDetail.setVisibility(View.VISIBLE);
   }
 
-  private void setFABButton() {
-    //TODO [3] Set FloatingActionButton based on database query isExist
-    btnAddToFavorite.setImageResource(BUTTON_FAB_OFF);
-    btnAddToFavorite.setTag(BUTTON_FAB_OFF);
+  private void setFavoriteButton(MovieObject obj) {
+    MovieFavoriteDbHelper dbHelper = new MovieFavoriteDbHelper(getActivity().getApplicationContext());
+    SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+    boolean isExist = dbHelper.isExistMovieObject(db, obj);
+
+    if(isExist) {
+      btnAddToFavorite.setImageResource(BUTTON_FAB_ON);
+      btnAddToFavorite.setTag(BUTTON_FAB_ON);
+    }
+    else {
+      btnAddToFavorite.setImageResource(BUTTON_FAB_OFF);
+      btnAddToFavorite.setTag(BUTTON_FAB_OFF);
+    }
+
+    db.close();
+  }
+
+  private Observable<Integer> createButtonClickObservable() {
+    return Observable.create(new ObservableOnSubscribe<Integer>() {
+      @Override
+      public void subscribe(@NonNull final ObservableEmitter<Integer> e) throws Exception {
+        btnAddToFavorite.setOnClickListener(new View.OnClickListener() {
+          @Override
+          public void onClick(View v) {
+            int btnTag = Integer.parseInt(btnAddToFavorite.getTag().toString());
+            e.onNext(btnTag);
+          }
+        });
+
+        e.setCancellable(new Cancellable() {
+          @Override
+          public void cancel() throws Exception {
+            btnAddToFavorite.setOnClickListener(null);
+          }
+        });
+      }
+    });
   }
 }

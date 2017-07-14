@@ -84,7 +84,7 @@ public class MovieObject implements Parcelable {
   }
 
   //Read from Parcel with the order of serialization
-  protected MovieObject(Parcel in) {
+  public MovieObject(Parcel in) {
     setObjectIsAdultRated(in.readInt() == 1);
     setObjectBackdropPath(in.readString());
     in.readList(ObjectGenreIds, List.class.getClassLoader());
@@ -101,6 +101,8 @@ public class MovieObject implements Parcelable {
     setObjectRating(in.readFloat());
     setObjectVoteCount(in.readInt());
   }
+
+  public MovieObject() { }
 
   public static final Creator<MovieObject> CREATOR = new Creator<MovieObject>() {
     @Override
