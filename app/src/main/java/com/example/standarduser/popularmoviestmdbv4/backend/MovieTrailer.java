@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName;
  * Created by standard on 7/7/17.
  */
 
-class MovieTrailer {
+public class MovieTrailer {
   @SerializedName("id")
   private String trailerId;
 
