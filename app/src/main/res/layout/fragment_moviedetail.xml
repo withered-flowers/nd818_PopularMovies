@@ -110,7 +110,7 @@
     android:layout_margin="16dp"
     android:clickable="true"
     app:fabSize="mini"
-    app:srcCompat="@android:drawable/btn_star"/>
+    app:srcCompat="@android:drawable/btn_star_big_off"/>
 
   <ProgressBar
     android:id="@+id/moviedetail_progressbar_movietrailerandreview"

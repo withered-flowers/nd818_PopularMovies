@@ -46,6 +46,9 @@ public class FragmentMovieDetail extends Fragment implements AdapterMovieTrailer
   private static final String IMAGE_SIZE = "w185";
   private static final String BASE_YOUTUBE_URL = "https://www.youtube.com/watch?v=";
 
+  private static final int BUTTON_FAB_ON  = android.R.drawable.btn_star_big_on;
+  private static final int BUTTON_FAB_OFF = android.R.drawable.btn_star_big_off;
+
   private CoordinatorLayout lytMain;
   private ImageView imgMovie;
   private FloatingActionButton btnAddToFavorite;
@@ -92,6 +95,7 @@ public class FragmentMovieDetail extends Fragment implements AdapterMovieTrailer
     rvwReviews = (RecyclerView) view.findViewById(R.id.moviedetail_recyclerview_moviereviews);
 
     hideView();
+    setFABButton();
 
     if(getArguments().getParcelable(PARCEL_TAG) != null) {
       MovieObject objMovie = getArguments().getParcelable(PARCEL_TAG);
@@ -182,6 +186,17 @@ public class FragmentMovieDetail extends Fragment implements AdapterMovieTrailer
     btnAddToFavorite.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
+        int btnTag = Integer.parseInt(btnAddToFavorite.getTag().toString());
+
+        if(btnTag == BUTTON_FAB_ON) {
+          btnAddToFavorite.setImageResource(BUTTON_FAB_OFF);
+          btnAddToFavorite.setTag(BUTTON_FAB_OFF);
+        }
+        else if (btnTag == BUTTON_FAB_OFF) {
+          btnAddToFavorite.setImageResource(BUTTON_FAB_ON);
+          btnAddToFavorite.setTag(BUTTON_FAB_ON);
+        }
+
         //TODO [1] Add parcelable (id, name) to database
         Snackbar.make(lytMain, "This is just a click", Snackbar.LENGTH_SHORT).show();
       }
@@ -202,5 +217,11 @@ public class FragmentMovieDetail extends Fragment implements AdapterMovieTrailer
     btnAddToFavorite.setVisibility(View.INVISIBLE);
 
     pgbMovieDetail.setVisibility(View.VISIBLE);
+  }
+
+  private void setFABButton() {
+    //TODO [3] Set FloatingActionButton based on database query isExist
+    btnAddToFavorite.setImageResource(BUTTON_FAB_OFF);
+    btnAddToFavorite.setTag(BUTTON_FAB_OFF);
   }
 }
