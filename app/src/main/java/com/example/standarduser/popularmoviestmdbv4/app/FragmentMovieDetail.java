@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -14,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.standarduser.popularmoviestmdbv4.BuildConfig;
@@ -47,6 +49,8 @@ public class FragmentMovieDetail extends Fragment implements AdapterMovieTrailer
   private CoordinatorLayout lytMain;
   private ImageView imgMovie;
   private FloatingActionButton btnAddToFavorite;
+  private NestedScrollView lytMainItem;
+  private ProgressBar pgbMovieDetail;
   private TextView txtTitle;
   private TextView txtReleaseDate;
   private TextView txtVoteAverage;
@@ -71,12 +75,16 @@ public class FragmentMovieDetail extends Fragment implements AdapterMovieTrailer
     final View view = inflater.inflate(R.layout.fragment_moviedetail, container, false);
 
     lytMain = (CoordinatorLayout) view.findViewById(R.id.moviedetail_coordinatorlayout_mainlayout);
+    lytMainItem = (NestedScrollView) view.findViewById(R.id.moviedetail_nestedscrollview_mainlayout);
+    pgbMovieDetail = (ProgressBar) view.findViewById(R.id.moviedetail_progressbar_movietrailerandreview);
+
     imgMovie = (ImageView) view.findViewById(R.id.moviedetail_imageview_movieimage);
     btnAddToFavorite = (FloatingActionButton) view.findViewById(R.id.moviedetail_button_movieaddfavorite);
     txtTitle = (TextView) view.findViewById(R.id.moviedetail_textview_movietitle);
     txtReleaseDate = (TextView) view.findViewById(R.id.moviedetail_textview_moviereleasedate);
     txtVoteAverage = (TextView) view.findViewById(R.id.moviedetail_textview_movievoteaverage);
     txtDescription = (TextView) view.findViewById(R.id.moviedetail_textview_moviedescription);
+
     rvwTrailers = (RecyclerView) view.findViewById(R.id.moviedetail_recyclerview_movietrailers);
     rvwReviews = (RecyclerView) view.findViewById(R.id.moviedetail_recyclerview_moviereviews);
 
@@ -163,5 +171,19 @@ public class FragmentMovieDetail extends Fragment implements AdapterMovieTrailer
     });
 
     return view;
+  }
+
+  private void showView() {
+    lytMainItem.setVisibility(View.VISIBLE);
+    btnAddToFavorite.setVisibility(View.VISIBLE);
+
+    pgbMovieDetail.setVisibility(View.INVISIBLE);
+  }
+
+  private void hideView() {
+    lytMainItem.setVisibility(View.INVISIBLE);
+    btnAddToFavorite.setVisibility(View.INVISIBLE);
+
+    pgbMovieDetail.setVisibility(View.VISIBLE);
   }
 }
