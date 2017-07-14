@@ -58,6 +58,9 @@ public class FragmentMovieDetail extends Fragment implements AdapterMovieTrailer
   private RecyclerView rvwTrailers;
   private RecyclerView rvwReviews;
 
+  private boolean isFetchMovieTrailerComplete = false;
+  private boolean isFetchMovieReviewComplete = false;
+
   private Call<List_MovieTrailers> callMovieTrailers;
   private Call<List_MovieReviews> callMovieReviews;
 
@@ -87,6 +90,8 @@ public class FragmentMovieDetail extends Fragment implements AdapterMovieTrailer
 
     rvwTrailers = (RecyclerView) view.findViewById(R.id.moviedetail_recyclerview_movietrailers);
     rvwReviews = (RecyclerView) view.findViewById(R.id.moviedetail_recyclerview_moviereviews);
+
+    hideView();
 
     if(getArguments().getParcelable(PARCEL_TAG) != null) {
       MovieObject objMovie = getArguments().getParcelable(PARCEL_TAG);
@@ -128,6 +133,12 @@ public class FragmentMovieDetail extends Fragment implements AdapterMovieTrailer
             rvwTrailers.setLayoutManager(rvwLayoutManager);
 
             rvwTrailers.setAdapter(adpMovieTrailer);
+
+            isFetchMovieTrailerComplete = true;
+
+            if(isFetchMovieReviewComplete && isFetchMovieTrailerComplete) {
+              showView();
+            }
           }
         }
 
@@ -152,6 +163,12 @@ public class FragmentMovieDetail extends Fragment implements AdapterMovieTrailer
             rvwReviews.setLayoutManager(rvwLayoutManager);
 
             rvwReviews.setAdapter(adpMovieReview);
+
+            isFetchMovieReviewComplete = true;
+
+            if(isFetchMovieReviewComplete && isFetchMovieTrailerComplete) {
+              showView();
+            }
           }
         }
 
