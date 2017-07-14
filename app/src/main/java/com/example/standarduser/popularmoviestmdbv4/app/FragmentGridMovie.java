@@ -15,10 +15,10 @@ import android.widget.ProgressBar;
 
 import com.example.standarduser.popularmoviestmdbv4.BuildConfig;
 import com.example.standarduser.popularmoviestmdbv4.R;
-import com.example.standarduser.popularmoviestmdbv4.backend.APIEndpoint;
-import com.example.standarduser.popularmoviestmdbv4.backend.Fetcher;
-import com.example.standarduser.popularmoviestmdbv4.backend.List_MovieObjects;
-import com.example.standarduser.popularmoviestmdbv4.backend.MovieObject;
+import com.example.standarduser.popularmoviestmdbv4.backend.retrofit.APIEndpoint;
+import com.example.standarduser.popularmoviestmdbv4.backend.retrofit.Fetcher;
+import com.example.standarduser.popularmoviestmdbv4.backend.pojo.List_MovieObjects;
+import com.example.standarduser.popularmoviestmdbv4.backend.pojo.MovieObject;
 
 import java.util.List;
 

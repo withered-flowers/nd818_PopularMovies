@@ -20,13 +20,13 @@ import android.widget.TextView;
 
 import com.example.standarduser.popularmoviestmdbv4.BuildConfig;
 import com.example.standarduser.popularmoviestmdbv4.R;
-import com.example.standarduser.popularmoviestmdbv4.backend.APIEndpoint;
-import com.example.standarduser.popularmoviestmdbv4.backend.Fetcher;
-import com.example.standarduser.popularmoviestmdbv4.backend.List_MovieReviews;
-import com.example.standarduser.popularmoviestmdbv4.backend.List_MovieTrailers;
-import com.example.standarduser.popularmoviestmdbv4.backend.MovieObject;
-import com.example.standarduser.popularmoviestmdbv4.backend.MovieReview;
-import com.example.standarduser.popularmoviestmdbv4.backend.MovieTrailer;
+import com.example.standarduser.popularmoviestmdbv4.backend.retrofit.APIEndpoint;
+import com.example.standarduser.popularmoviestmdbv4.backend.retrofit.Fetcher;
+import com.example.standarduser.popularmoviestmdbv4.backend.pojo.List_MovieReviews;
+import com.example.standarduser.popularmoviestmdbv4.backend.pojo.List_MovieTrailers;
+import com.example.standarduser.popularmoviestmdbv4.backend.pojo.MovieObject;
+import com.example.standarduser.popularmoviestmdbv4.backend.pojo.MovieReview;
+import com.example.standarduser.popularmoviestmdbv4.backend.pojo.MovieTrailer;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;

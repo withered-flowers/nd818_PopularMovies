@@ -9,7 +9,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.standarduser.popularmoviestmdbv4.R;
-import com.example.standarduser.popularmoviestmdbv4.backend.MovieTrailer;
+import com.example.standarduser.popularmoviestmdbv4.backend.pojo.MovieTrailer;
 
 import java.util.List;
 

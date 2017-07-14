@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.standarduser.popularmoviestmdbv4.R;
-import com.example.standarduser.popularmoviestmdbv4.backend.MovieReview;
+import com.example.standarduser.popularmoviestmdbv4.backend.pojo.MovieReview;
 
 import java.util.List;
 

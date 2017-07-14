@@ -1,4 +1,8 @@
-package com.example.standarduser.popularmoviestmdbv4.backend;
+package com.example.standarduser.popularmoviestmdbv4.backend.retrofit;
+
+import com.example.standarduser.popularmoviestmdbv4.backend.pojo.List_MovieObjects;
+import com.example.standarduser.popularmoviestmdbv4.backend.pojo.List_MovieReviews;
+import com.example.standarduser.popularmoviestmdbv4.backend.pojo.List_MovieTrailers;
 
 import retrofit2.Call;
 import retrofit2.http.GET;

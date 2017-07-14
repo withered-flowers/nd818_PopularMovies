@@ -1,4 +1,4 @@
-package com.example.standarduser.popularmoviestmdbv4.backend;
+package com.example.standarduser.popularmoviestmdbv4.backend.retrofit;
 
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;

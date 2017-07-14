@@ -1,4 +1,4 @@
-package com.example.standarduser.popularmoviestmdbv4.backend;
+package com.example.standarduser.popularmoviestmdbv4.backend.pojo;
 
 import com.google.gson.annotations.SerializedName;
 

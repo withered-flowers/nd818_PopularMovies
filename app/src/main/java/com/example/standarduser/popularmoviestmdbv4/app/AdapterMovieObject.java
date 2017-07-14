@@ -2,14 +2,13 @@ package com.example.standarduser.popularmoviestmdbv4.app;
 
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.example.standarduser.popularmoviestmdbv4.R;
-import com.example.standarduser.popularmoviestmdbv4.backend.MovieObject;
+import com.example.standarduser.popularmoviestmdbv4.backend.pojo.MovieObject;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
