@@ -2,17 +2,26 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="vertical"
               android:layout_width="match_parent"
-              android:layout_height="match_parent">
+              android:layout_height="wrap_content"
+              android:layout_marginTop="8dp">
 
   <TextView
     android:id="@+id/moviedetail_review_reviewauthor"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:textStyle="bold"
     android:text="TextView"/>
 
   <TextView
     android:id="@+id/moviedetail_review_reviewcontent"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:paddingTop="4dp"
+    android:paddingBottom="8dp"
     android:text="TextView" />
+
+  <View
+    android:layout_width="match_parent"
+    android:layout_height="1dp"
+    android:background="?android:attr/listDivider" />
 </LinearLayout>

@@ -19,6 +19,10 @@ public class AdapterMovieReview extends RecyclerView.Adapter<AdapterMovieReview.
   private List<MovieReview> listReview;
   private MovieReview currentMovieReview;
 
+  public AdapterMovieReview(List<MovieReview> listReview) {
+    this.listReview = listReview;
+  }
+
   @Override
   public AdapterMovieReviewViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
     LayoutInflater inflater = LayoutInflater.from(parent.getContext());
