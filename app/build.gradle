@@ -1,6 +1,4 @@
 apply plugin: 'com.android.application'
-//GreenDAO 3rd Party
-apply plugin: 'org.greenrobot.greendao'
 
 android {
   compileSdkVersion 25
@@ -57,9 +55,6 @@ dependencies {
   //ButterKnife 3rd Party
   annotationProcessor 'com.jakewharton:butterknife-compiler:8.6.0'
   compile 'com.jakewharton:butterknife:8.6.0'
-
-  //GreenDAO 3rd Party
-  compile 'org.greenrobot:greendao:3.2.2'
 
   testCompile 'junit:junit:4.12'
 }

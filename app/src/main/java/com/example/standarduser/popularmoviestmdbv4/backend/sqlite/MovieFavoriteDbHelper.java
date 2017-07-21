@@ -17,10 +17,10 @@ import java.util.List;
  */
 
 public class MovieFavoriteDbHelper extends SQLiteOpenHelper {
-  public static final String DATABASE_NAME = "moviefavorite.db";
-
+  private static final String DATABASE_NAME = "moviefavorite.db";
+  
   private static final int DATABASE_VERSION = 1;
-
+  
   public MovieFavoriteDbHelper(Context context) {
     super(context, DATABASE_NAME, null, DATABASE_VERSION);
   }
@@ -71,27 +71,19 @@ public class MovieFavoriteDbHelper extends SQLiteOpenHelper {
     String[] projection = {
         MovieFavoriteEntry.COLUMN_MOVIE_ID
     };
-
+  
     String selection = MovieFavoriteEntry.COLUMN_MOVIE_ID + " = ?";
-    String[] selectionArgs = new String[] { String.valueOf(obj.getObjectId()) };
-
+    String[] selectionArgs = new String[]{String.valueOf(obj.getObjectId())};
+  
     Cursor cursor = db.query(
         MovieFavoriteEntry.TABLE_NAME,
         projection,
         selection,
         selectionArgs,
-        null,null,null,null
+        null, null, null, null
     );
-
-    if(cursor != null) {
-      if(cursor.moveToFirst()) {
-        return true;
-      } else {
-        return false;
-      }
-    }
-
-    return false;
+  
+    return cursor != null && cursor.moveToFirst();
   }
 
   public boolean insertMovieObject(SQLiteDatabase db, MovieObject obj) {
@@ -115,18 +107,17 @@ public class MovieFavoriteDbHelper extends SQLiteOpenHelper {
 
   @Override
   public void onCreate(SQLiteDatabase db) {
-    final String SQL_CREATE =
-        "CREATE TABLE " + MovieFavoriteEntry.TABLE_NAME + " (" +
-          MovieFavoriteEntry._ID                        + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-          MovieFavoriteEntry.COLUMN_MOVIE_ID            + " INTEGER NOT NULL, " +
-          MovieFavoriteEntry.COLUMN_MOVIE_TITLE         + " TEXT NOT NULL, " +
-          MovieFavoriteEntry.COLUMN_MOVIE_POSTER_PATH   + " TEXT NOT NULL, " +
-          MovieFavoriteEntry.COLUMN_MOVIE_DESCRIPTION   + " TEXT NOT NULL, " +
-          MovieFavoriteEntry.COLUMN_MOVIE_RATING        + " REAL NOT NULL, " +
-          MovieFavoriteEntry.COLUMN_MOVIE_RELEASE_DATE  + " STRING NOT NULL, " +
-          "UNIQUE (" + MovieFavoriteEntry.COLUMN_MOVIE_ID + ") ON CONFLICT REPLACE" +
+    String SQL_CREATE = "CREATE TABLE " + MovieFavoriteEntry.TABLE_NAME + " (" +
+        MovieFavoriteEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+        MovieFavoriteEntry.COLUMN_MOVIE_ID + " INTEGER NOT NULL, " +
+        MovieFavoriteEntry.COLUMN_MOVIE_TITLE + " TEXT NOT NULL, " +
+        MovieFavoriteEntry.COLUMN_MOVIE_POSTER_PATH + " TEXT NOT NULL, " +
+        MovieFavoriteEntry.COLUMN_MOVIE_DESCRIPTION + " TEXT NOT NULL, " +
+        MovieFavoriteEntry.COLUMN_MOVIE_RATING + " REAL NOT NULL, " +
+        MovieFavoriteEntry.COLUMN_MOVIE_RELEASE_DATE + " TEXT NOT NULL, " +
+        "UNIQUE (" + MovieFavoriteEntry.COLUMN_MOVIE_ID + ") ON CONFLICT REPLACE" +
         ");";
-
+    
     db.execSQL(SQL_CREATE);
   }
 

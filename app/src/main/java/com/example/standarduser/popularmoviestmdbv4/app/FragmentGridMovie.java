@@ -3,7 +3,7 @@ package com.example.standarduser.popularmoviestmdbv4.app;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.SharedPreferences;
-import android.database.sqlite.SQLiteDatabase;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.widget.GridLayoutManager;
@@ -16,12 +16,13 @@ import android.widget.ProgressBar;
 
 import com.example.standarduser.popularmoviestmdbv4.BuildConfig;
 import com.example.standarduser.popularmoviestmdbv4.R;
-import com.example.standarduser.popularmoviestmdbv4.backend.retrofit.APIEndpoint;
-import com.example.standarduser.popularmoviestmdbv4.backend.retrofit.Fetcher;
 import com.example.standarduser.popularmoviestmdbv4.backend.pojo.List_MovieObjects;
 import com.example.standarduser.popularmoviestmdbv4.backend.pojo.MovieObject;
-import com.example.standarduser.popularmoviestmdbv4.backend.sqlite.MovieFavoriteDbHelper;
+import com.example.standarduser.popularmoviestmdbv4.backend.retrofit.APIEndpoint;
+import com.example.standarduser.popularmoviestmdbv4.backend.retrofit.Fetcher;
+import com.example.standarduser.popularmoviestmdbv4.backend.sqlite.MovieFavoriteContract.MovieFavoriteEntry;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -113,13 +114,18 @@ public class FragmentGridMovie extends Fragment implements AdapterMovieObject.cl
       });
     }
     else {
-      MovieFavoriteDbHelper dbHelper = new MovieFavoriteDbHelper(getActivity().getApplicationContext());
-      SQLiteDatabase db = dbHelper.getReadableDatabase();
+      /* THIS IS THE OLD WAY (CONSUME DBHELPER & DB INSTANTLY) */
+//      MovieFavoriteDbHelper dbHelper = new MovieFavoriteDbHelper(getActivity().getApplicationContext());
+//      SQLiteDatabase db = dbHelper.getReadableDatabase();
+//
+//      List<MovieObject> listMovie = dbHelper.getAllMovieObject(db);
+//      db.close();
+//      /* END OF OLD WAY */
 
-      List<MovieObject> listMovie = dbHelper.getAllMovieObject(db);
-      db.close();
-
-      allocateRecyclerView(listMovie, view);
+      List<MovieObject> listMovie = allocateListMovieObject();
+      if(listMovie != null) {
+        allocateRecyclerView(listMovie, view);
+      }
 
       rvwGridMovie.setVisibility(View.VISIBLE);
       pbrMovieList.setVisibility(View.INVISIBLE);
@@ -138,5 +144,41 @@ public class FragmentGridMovie extends Fragment implements AdapterMovieObject.cl
     rvwGridMovie.setLayoutManager(rvwLayoutManager);
 
     rvwGridMovie.setAdapter(adpMovieObject);
+  }
+  
+  private List<MovieObject> allocateListMovieObject() {
+    List<MovieObject> ListMovieObject = null;
+    
+    Cursor cursor = getActivity().getContentResolver().query(
+        MovieFavoriteEntry.CONTENT_URI,
+        null,
+        null,
+        null,
+        null,
+        null
+    );
+    
+    if(cursor != null && cursor.moveToFirst()) {
+      ListMovieObject = new ArrayList<>();
+      
+      do {
+        MovieObject obj = new MovieObject();
+  
+        obj.setObjectId(cursor.getInt(cursor.getColumnIndexOrThrow(MovieFavoriteEntry.COLUMN_MOVIE_ID)));
+        obj.setObjectTitle(cursor.getString(cursor.getColumnIndexOrThrow(MovieFavoriteEntry.COLUMN_MOVIE_TITLE)));
+        obj.setObjectPosterPath(cursor.getString(cursor.getColumnIndexOrThrow(MovieFavoriteEntry.COLUMN_MOVIE_POSTER_PATH)));
+        obj.setObjectDescription(cursor.getString(cursor.getColumnIndexOrThrow(MovieFavoriteEntry.COLUMN_MOVIE_DESCRIPTION)));
+        obj.setObjectRating(cursor.getFloat(cursor.getColumnIndexOrThrow(MovieFavoriteEntry.COLUMN_MOVIE_RATING)));
+        obj.setObjectReleaseDate(cursor.getString(cursor.getColumnIndexOrThrow(MovieFavoriteEntry.COLUMN_MOVIE_RELEASE_DATE)));
+  
+        ListMovieObject.add(obj);
+      } while(cursor.moveToNext());
+      
+      if(!cursor.isClosed()) {
+        cursor.close();
+      }
+    }
+    
+    return ListMovieObject;
   }
 }

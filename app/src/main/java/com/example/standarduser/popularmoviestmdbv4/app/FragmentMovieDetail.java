@@ -1,7 +1,9 @@
 package com.example.standarduser.popularmoviestmdbv4.app;
 
 import android.app.Fragment;
+import android.content.ContentValues;
 import android.content.Intent;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
@@ -21,13 +23,14 @@ import android.widget.TextView;
 
 import com.example.standarduser.popularmoviestmdbv4.BuildConfig;
 import com.example.standarduser.popularmoviestmdbv4.R;
-import com.example.standarduser.popularmoviestmdbv4.backend.retrofit.APIEndpoint;
-import com.example.standarduser.popularmoviestmdbv4.backend.retrofit.Fetcher;
 import com.example.standarduser.popularmoviestmdbv4.backend.pojo.List_MovieReviews;
 import com.example.standarduser.popularmoviestmdbv4.backend.pojo.List_MovieTrailers;
 import com.example.standarduser.popularmoviestmdbv4.backend.pojo.MovieObject;
 import com.example.standarduser.popularmoviestmdbv4.backend.pojo.MovieReview;
 import com.example.standarduser.popularmoviestmdbv4.backend.pojo.MovieTrailer;
+import com.example.standarduser.popularmoviestmdbv4.backend.retrofit.APIEndpoint;
+import com.example.standarduser.popularmoviestmdbv4.backend.retrofit.Fetcher;
+import com.example.standarduser.popularmoviestmdbv4.backend.sqlite.MovieFavoriteContract;
 import com.example.standarduser.popularmoviestmdbv4.backend.sqlite.MovieFavoriteDbHelper;
 import com.squareup.picasso.Picasso;
 
@@ -206,29 +209,67 @@ public class FragmentMovieDetail extends Fragment implements AdapterMovieTrailer
 
               String snackbarString = "";
 
+              /* THIS IS THE OLD WAY (CONSUME DBHELPER & DB INSTANTLY) */
+//              if(tagNumber == BUTTON_FAB_ON) {
+//                btnAddToFavorite.setImageResource(BUTTON_FAB_OFF);
+//                btnAddToFavorite.setTag(BUTTON_FAB_OFF);
+//
+//                if(dbHelper.deleteMovieObject(db, objMovie)) {
+//                  snackbarString = "Movie delete success";
+//                } else {
+//                  snackbarString = "Movie delete error";
+//                }
+//              }
+//              else if (tagNumber == BUTTON_FAB_OFF) {
+//                btnAddToFavorite.setImageResource(BUTTON_FAB_ON);
+//                btnAddToFavorite.setTag(BUTTON_FAB_ON);
+//
+//                if(dbHelper.insertMovieObject(db, objMovie)) {
+//                  snackbarString = "Movie insert success";
+//                } else {
+//                  snackbarString = "Movie insert error";
+//                }
+//              }
+//
+//              db.close();
+              /* END OF THE OLD WAY */
+
               if(tagNumber == BUTTON_FAB_ON) {
                 btnAddToFavorite.setImageResource(BUTTON_FAB_OFF);
                 btnAddToFavorite.setTag(BUTTON_FAB_OFF);
-
-                if(dbHelper.deleteMovieObject(db, objMovie)) {
+  
+                String whereClause = MovieFavoriteContract.MovieFavoriteEntry.COLUMN_MOVIE_ID + " = ?";
+                String[] whereArgs = new String[] {String.valueOf(objMovie.getObjectId())};
+                
+                int deleteDb = getActivity()
+                    .getContentResolver()
+                    .delete(MovieFavoriteContract.BASE_CONTENT_URI, whereClause, whereArgs);
+                
+                if(deleteDb > 0) {
                   snackbarString = "Movie delete success";
-                } else {
+                }
+                else {
                   snackbarString = "Movie delete error";
                 }
               }
               else if (tagNumber == BUTTON_FAB_OFF) {
                 btnAddToFavorite.setImageResource(BUTTON_FAB_ON);
                 btnAddToFavorite.setTag(BUTTON_FAB_ON);
-
-                if(dbHelper.insertMovieObject(db, objMovie)) {
-                  snackbarString = "Movie insert success";
-                } else {
+  
+                ContentValues val = createContentValues(objMovie);
+  
+                Uri insertDb = getActivity()
+                    .getContentResolver()
+                    .insert(MovieFavoriteContract.BASE_CONTENT_URI, val);
+  
+                if(insertDb.toString().contains("Failed to add record")) {
                   snackbarString = "Movie insert error";
                 }
+                else {
+                  snackbarString = "Movie insert success";
+                }
               }
-
-              db.close();
-
+              
               Snackbar.make(lytMain, snackbarString, Snackbar.LENGTH_SHORT).show();
             }
           });
@@ -251,12 +292,44 @@ public class FragmentMovieDetail extends Fragment implements AdapterMovieTrailer
     pgbMovieDetail.setVisibility(View.VISIBLE);
   }
 
+  private ContentValues createContentValues(MovieObject obj) {
+    ContentValues val = new ContentValues();
+  
+    val.put(MovieFavoriteContract.MovieFavoriteEntry.COLUMN_MOVIE_ID, obj.getObjectId());
+    val.put(MovieFavoriteContract.MovieFavoriteEntry.COLUMN_MOVIE_TITLE, obj.getObjectTitle());
+    val.put(MovieFavoriteContract.MovieFavoriteEntry.COLUMN_MOVIE_POSTER_PATH, obj.getObjectPosterPath());
+    val.put(MovieFavoriteContract.MovieFavoriteEntry.COLUMN_MOVIE_DESCRIPTION, obj.getObjectDescription());
+    val.put(MovieFavoriteContract.MovieFavoriteEntry.COLUMN_MOVIE_RATING, obj.getObjectRating());
+    val.put(MovieFavoriteContract.MovieFavoriteEntry.COLUMN_MOVIE_RELEASE_DATE, obj.getObjectReleaseDate());
+    
+    return val;
+  }
+  
   private void setFavoriteButton(MovieObject obj) {
-    MovieFavoriteDbHelper dbHelper = new MovieFavoriteDbHelper(getActivity().getApplicationContext());
-    SQLiteDatabase db = dbHelper.getReadableDatabase();
+    /* THIS IS THE OLD WAY (CONSUME DBHELPER & DB INSTANTLY) */
+//    MovieFavoriteDbHelper dbHelper = new MovieFavoriteDbHelper(getActivity().getApplicationContext());
+//    SQLiteDatabase db = dbHelper.getReadableDatabase();
+//
+//    boolean isExist = dbHelper.isExistMovieObject(db, obj);
+    /* END OF THE OLD WAY */
 
-    boolean isExist = dbHelper.isExistMovieObject(db, obj);
-
+    Uri uri = MovieFavoriteContract.MovieFavoriteEntry.buildFavoriteUriWithMovieId(obj.getObjectId());
+  
+    Cursor cursor = getActivity().getContentResolver().query(
+      uri,
+      null,
+      null,
+      null,
+      null,
+      null
+    );
+    
+    boolean isExist = (cursor != null && cursor.moveToFirst());
+    
+    if(!cursor.isClosed()) {
+      cursor.close();
+    }
+    
     if(isExist) {
       btnAddToFavorite.setImageResource(BUTTON_FAB_ON);
       btnAddToFavorite.setTag(BUTTON_FAB_ON);
@@ -266,7 +339,7 @@ public class FragmentMovieDetail extends Fragment implements AdapterMovieTrailer
       btnAddToFavorite.setTag(BUTTON_FAB_OFF);
     }
 
-    db.close();
+//    db.close();
   }
 
   private Observable<Integer> createButtonClickObservable() {
